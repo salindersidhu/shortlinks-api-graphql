@@ -18,11 +18,14 @@
   },
   "homepage": "https://github.com/salindersidhu/shortlinks#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "crypto": "^1.0.1",
     "express": "^4.17.0",
     "express-graphql": "^0.8.0",
     "graphql": "^14.3.0",
-    "mongoose": "^5.5.9"
+    "mongoose": "^5.5.9",
+    "njwt": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.0"

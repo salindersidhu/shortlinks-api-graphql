@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const graphqlHttp = require('express-graphql');
 
+const config = require('./config');
+
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolvers = require('./graphql/resolvers');
 
@@ -16,16 +18,16 @@ app.use(
     graphqlHttp({
         schema: graphqlSchema,
         rootValue: graphqlResolvers,
-        graphiql: true
+        graphiql: config.GRAPHIQL
     })
 );
 
 /* Configure Database connection */
-mongoose.connect(process.env.MONGO_DB_URI, {
+mongoose.connect(config.DB.URI, {
     useNewUrlParser: true
 }).then(() => {
     /* Start server */
-    app.listen(process.env.PORT);
+    app.listen(config.PORT);
 }).catch(err => {
     console.log(err);
 });
