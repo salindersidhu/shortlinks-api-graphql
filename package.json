@@ -28,6 +28,7 @@
     "njwt": "^1.0.0"
   },
   "devDependencies": {
+    "eslint": "^5.16.0",
     "nodemon": "^1.19.0"
   }
 }
