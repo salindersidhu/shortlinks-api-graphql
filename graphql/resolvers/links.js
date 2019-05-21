@@ -4,7 +4,7 @@ module.exports = {
     links: () => {
         return Link.find().then(links => {
             return links.map(link => {
-                return {...link._doc};
+                return { ...link._doc };
             });
         }).catch(err => {
             throw err;
@@ -16,7 +16,7 @@ module.exports = {
             url: args.linkInput.url
         });
         return link.save().then(result => {
-            return {...result._doc};
+            return { ...result._doc };
         }).catch(err => {
             console.log(err);
             throw err;
