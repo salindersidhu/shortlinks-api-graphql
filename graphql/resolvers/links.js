@@ -1,25 +1,28 @@
 const Link = require('../../models/link');
 
 module.exports = {
-    links: () => {
-        return Link.find().then(links => {
+    links: async () => {
+        try {
+            const links = await Link.find();
             return links.map(link => {
                 return { ...link._doc };
             });
-        }).catch(err => {
+        } catch(err) {
             throw err;
-        });
+        }
     },
-    createLink: (args) => {
-        const link = new Link({
-            name: args.linkInput.name,
-            url: args.linkInput.url
-        });
-        return link.save().then(result => {
+    createLink: async ({ linkInput }) => {
+        try {
+            /* Create a new Link and save to DB */
+            const link = new Link ({
+                name: linkInput.name,
+                url: linkInput.url
+            });
+            const result = await link.save();
+            /* Return created Link */
             return { ...result._doc };
-        }).catch(err => {
-            console.log(err);
+        } catch(err) {
             throw err;
-        });
+        }
     }
 };
