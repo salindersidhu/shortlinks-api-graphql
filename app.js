@@ -27,7 +27,9 @@ mongoose.connect(config.DB.URI, {
     useNewUrlParser: true
 }).then(() => {
     /* Start server */
-    app.listen(config.PORT);
+    app.listen(config.PORT, () => {
+        console.log(`Listening on port ${config.PORT}`);
+    });
 }).catch(err => {
     console.log(err);
 });
