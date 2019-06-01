@@ -8,11 +8,13 @@ const config = require('./config');
 
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolvers = require('./graphql/resolvers');
+const auth = require('./middleware/auth');
 
 /* Configure Express app and middleware */
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+app.use(auth);
 
 /* Configure GraphQL endpoint */
 app.use(
