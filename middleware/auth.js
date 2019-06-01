@@ -2,7 +2,7 @@ const njwt = require('njwt');
 
 const config = require('../config');
 
-module.exports = (req, res, next) => {
+module.exports = (req, _, next) => {
     /* Check if request header contains 'Authorization' */
     const header = req.get('Authorization');
     if (!header) {

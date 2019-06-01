@@ -1,3 +1,5 @@
+const shortid = require('shortid');
+
 const Link = require('../../models/link');
 
 module.exports = {
@@ -16,7 +18,8 @@ module.exports = {
             /* Create a new Link and save to DB */
             const link = new Link ({
                 name: linkInput.name,
-                url: linkInput.url
+                url: linkInput.url,
+                short: shortid.generate()
             });
             const result = await link.save();
             /* Return created Link */

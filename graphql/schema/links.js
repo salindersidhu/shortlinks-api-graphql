@@ -3,6 +3,7 @@ exports.types = `
         _id: ID!
         name: String!
         url: String!
+        short: String!
     }
 `;
 
