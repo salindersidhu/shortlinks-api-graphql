@@ -30,5 +30,6 @@ module.exports = (req, _, next) => {
     }
     /* User is Authorized */
     req.isAuth = true;
+    req.userId = decodedToken.body.sub;
     next();
 };

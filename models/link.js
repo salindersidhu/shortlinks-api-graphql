@@ -15,6 +15,11 @@ const linkSchema = new mongoose.Schema({
     short: {
         type: String,
         required: true
+    },
+    creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
     }
 });
 

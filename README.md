@@ -2,21 +2,12 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](/LICENSE.md)
 
 # Table of Contents
-* [Overview](#overview)
 * [Development](#development)
     * [Prerequisites](#Prerequisites)
     * [Running](#running)
     * [Contributing](#contributing)
 * [Codebase](#codebase)
     * [Structure](#structure)
-
-# Overview
-GraphQL API Server
-
-```
-HTTP:   POST
-URL:    http://localhost:8000/graphql
-```
 
 # Development
 > Information describing how to install and configure all the required tools to begin development.

@@ -4,6 +4,7 @@ exports.types = `
         name: String!
         url: String!
         short: String!
+        creator: User!
     }
 `;
 
@@ -20,4 +21,5 @@ exports.queries = `
 
 exports.mutations = `
     createLink(linkInput: LinkInput): Link
+    deleteLink(linkId: ID!): Link!
 `;
