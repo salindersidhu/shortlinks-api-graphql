@@ -16,13 +16,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         type: String
     },
-    flags: {
-        isActive: {
-            required: true,
-            type: Boolean,
-            default: false
-        }
-    }
+    createdLinks: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Link'
+    }]
 });
 
 module.exports = mongoose.model('User', userSchema);

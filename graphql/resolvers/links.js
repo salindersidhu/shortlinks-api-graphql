@@ -1,6 +1,8 @@
 const shortid = require('shortid');
 
 const Link = require('../../models/link');
+const User = require('../../models/user');
+const { transformLink } = require('./merge');
 
 module.exports = {
     links: async (_, req) => {
@@ -10,7 +12,7 @@ module.exports = {
         try {
             const links = await Link.find();
             return links.map(link => {
-                return { ...link._doc };
+                return transformLink(link);
             });
         } catch(err) {
             throw err;
@@ -20,17 +22,24 @@ module.exports = {
         if (!req.isAuth) {
             throw new Error('Unauthenticated!');
         }
+        /* Create a new Link */
+        const link = new Link ({
+            name: linkInput.name,
+            url: linkInput.url,
+            short: shortid.generate(),
+            creator: req.userId
+        });
         try {
-            /* Create a new Link and save to DB */
-            const link = new Link ({
-                name: linkInput.name,
-                url: linkInput.url,
-                short: shortid.generate(),
-                creator: req.userId
-            });
+            /* Save link to DB and find creator */
             const result = await link.save();
-            /* Return created Link */
-            return { ...result._doc };
+            const creator = await User.findById(req.userId);
+            if(!creator) {
+                throw new Error('User not found!');
+            }
+            creator.createdLinks.push(link);
+            await creator.save();
+            /* Return link with user object */
+            return transformLink(result);
         } catch(err) {
             throw err;
         }
@@ -41,9 +50,9 @@ module.exports = {
         }
         try {
             /* Find and delete link from DB */
-            const event = await Link.findById(linkId);
+            const link = await Link.findById(linkId);
             await Link.deleteOne({ _id: linkId });
-            return event;
+            return transformLink(link);
         } catch(err) {
             throw err;
         }

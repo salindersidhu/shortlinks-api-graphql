@@ -4,6 +4,7 @@ exports.types = `
         name: String!
         email: String!
         password: String
+        createdLinks: [Link!]
     }
 
     type AuthData {
