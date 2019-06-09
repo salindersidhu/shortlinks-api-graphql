@@ -26,9 +26,15 @@ exports.inputs = `
 `;
 
 exports.queries = `
+    """
+    Fetches User authenticated data upon login.
+    """
     login(loginInput: LoginInput): AuthData!
 `;
 
 exports.mutations = `
+    """
+    Create a new Link.
+    """
     createUser(userInput: UserInput): User
 `;

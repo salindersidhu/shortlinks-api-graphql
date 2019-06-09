@@ -16,10 +16,19 @@ exports.inputs = `
 `;
 
 exports.queries = `
+    """
+    Lookup all Links.
+    """
     links: [Link!]!
 `;
 
 exports.mutations = `
+    """
+    Create a new Link.
+    """
     createLink(linkInput: LinkInput): Link
+    """
+    Delete an existing Link given it's ID.
+    """
     deleteLink(linkId: ID!): Link!
 `;
