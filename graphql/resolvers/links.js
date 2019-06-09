@@ -18,14 +18,14 @@ module.exports = {
             throw err;
         }
     },
-    createLink: async ({ linkInput }, req) => {
+    createLink: async ({ input }, req) => {
         if (!req.isAuth) {
             throw new Error('Unauthenticated!');
         }
         /* Create a new Link */
         const link = new Link ({
-            name: linkInput.name,
-            url: linkInput.url,
+            name: input.name,
+            url: input.url,
             short: shortid.generate(),
             creator: req.userId
         });
@@ -44,14 +44,14 @@ module.exports = {
             throw err;
         }
     },
-    deleteLink: async ({ linkId }, req) => {
+    deleteLink: async ({ id }, req) => {
         if (!req.isAuth) {
             throw new Error('Unauthenticated!');
         }
         try {
             /* Find and delete link from DB */
-            const link = await Link.findById(linkId);
-            await Link.deleteOne({ _id: linkId });
+            const link = await Link.findById(id);
+            await Link.deleteOne({ _id: id });
             return transformLink(link);
         } catch(err) {
             throw err;

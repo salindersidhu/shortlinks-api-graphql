@@ -26,9 +26,9 @@ exports.mutations = `
     """
     Create a new Link.
     """
-    createLink(linkInput: LinkInput): Link
+    createLink(input: LinkInput): Link
     """
     Delete an existing Link given it's ID.
     """
-    deleteLink(linkId: ID!): Link!
+    deleteLink(id: ID!): Link!
 `;

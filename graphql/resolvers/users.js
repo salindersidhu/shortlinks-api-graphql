@@ -6,19 +6,19 @@ const config = require('../../config');
 const User = require('../../models/user');
 
 module.exports = {
-    createUser: async ({ userInput }) => {
+    createUser: async ({ input }) => {
         try {
             /* Check for existing user with the same email */
-            const existingUser = await User.findOne({ email: userInput.email });
+            const existingUser = await User.findOne({ email: input.email });
             if (existingUser) {
                 throw new Error('User already exists!');
             }
             /* Hash plaintext password for safe storage in DB */
-            const hashedPassword = await bcrypt.hash(userInput.password, 12);
+            const hashedPassword = await bcrypt.hash(input.password, 12);
             /* Create new User and save to DB */
             const user = new User({
-                name: userInput.name,
-                email: userInput.email,
+                name: input.name,
+                email: input.email,
                 password: hashedPassword
             });
             const result = await user.save();
@@ -28,14 +28,14 @@ module.exports = {
             throw err;
         }
     },
-    login: async ({ loginInput }, req) => {
+    login: async ({ input }, req) => {
         /* Check for existing user with the same email */
-        const user = await User.findOne({ email: loginInput.email });
+        const user = await User.findOne({ email: input.email });
         if (!user) {
             throw new Error('Incorrect login credentials!');
         }
         /* Check if password matches */
-        const isMatch = await bcrypt.compare(loginInput.password, user.password);
+        const isMatch = await bcrypt.compare(input.password, user.password);
         if (!isMatch) {
             throw new Error('Incorrect login credentials!');
         }

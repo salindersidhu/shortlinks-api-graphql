@@ -23,15 +23,21 @@ schemas.map(schema => {
 const rootSchema = buildSchema(`
     ${props.types.join('\n')}
     ${props.inputs.join('\n')}
-    type RootQuery {
+    """
+    The GraphQL root query.
+    """
+    type Query {
         ${props.queries.join('\n')}
     }
-    type RootMutation {
+    """
+    The GraphQL root mutations.
+    """
+    type Mutation {
         ${props.mutations.join('\n')}
     }
     schema {
-        query: RootQuery
-        mutation: RootMutation
+        query: Query
+        mutation: Mutation
     }
 `);
 
