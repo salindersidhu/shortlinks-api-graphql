@@ -28,7 +28,8 @@ app.use(
 
 /* Configure Database connection */
 mongoose.connect(config.DB.URI, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 }).then(() => {
     /* Start server */
     app.listen(config.PORT, () => {
