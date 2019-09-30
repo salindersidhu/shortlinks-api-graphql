@@ -1,7 +1,7 @@
 {
   "name": "shortlinks",
   "version": "1.0.0",
-  "description": "A link shortner app built using Node, GraphQL and React",
+  "description": "A link shortner api built using Node, GraphQL and React",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
