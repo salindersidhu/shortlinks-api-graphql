@@ -1,6 +1,5 @@
 const crypto = require('crypto');
 
-/* Base configuration */
 const config = {
     development: {
         PORT: 8000,

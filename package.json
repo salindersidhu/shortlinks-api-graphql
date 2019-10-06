@@ -1,7 +1,7 @@
 {
   "name": "shortlinks",
-  "version": "1.0.0",
-  "description": "A link shortner api built using Node, GraphQL and React",
+  "version": "1.5.0",
+  "description": "A link shortener API built using Node, Apollo Server and MongoDB.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
