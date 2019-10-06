@@ -1,60 +1,57 @@
 const shortid = require('shortid');
+const { UserInputError, AuthenticationError } = require('apollo-server');
 
-const Link = require('../../models/link');
-const User = require('../../models/user');
-const { transformLink } = require('./merge');
+const Link = require('../../models/Link');
+const checkAuth = require('../../utils/check-auth');
 
 module.exports = {
-    links: async (_, req) => {
-        if (!req.isAuth) {
-            throw new Error('Unauthenticated!');
-        }
-        try {
-            const links = await Link.find();
-            return links.map(link => {
-                return transformLink(link);
-            });
-        } catch(err) {
-            throw err;
-        }
-    },
-    createLink: async ({ input }, req) => {
-        if (!req.isAuth) {
-            throw new Error('Unauthenticated!');
-        }
-        /* Create a new Link */
-        const link = new Link ({
-            name: input.name,
-            url: input.url,
-            short: shortid.generate(),
-            creator: req.userId
-        });
-        try {
-            /* Save link to DB and find creator */
-            const result = await link.save();
-            const creator = await User.findById(req.userId);
-            if(!creator) {
-                throw new Error('User not found!');
+    Query: {
+        async getLinks(_, {}, context) {
+            // Check if user is authenticated
+            checkAuth(context);
+            try {
+                const links = await Link.find();
+                return links;
+            } catch(err) {
+                throw new Error(err);
             }
-            creator.createdLinks.push(link);
-            await creator.save();
-            /* Return link with user object */
-            return transformLink(result);
-        } catch(err) {
-            throw err;
         }
     },
-    deleteLink: async ({ id }, req) => {
-        if (!req.isAuth) {
-            throw new Error('Unauthenticated!');
-        }
-        try {
-            /* Find and delete link from DB */
-            const link = await Link.findById(id);
-            await Link.deleteOne({ _id: id });
-            return transformLink(link);
-        } catch(err) {
-            throw err;
+    Mutations: {
+        async createLink(_, { linkInput: { url, name } }, context) {
+            // Obtain user ID from auth token
+            const authData = checkAuth(context);
+            // Create a new Link
+            const newLink = new Link({
+                name,
+                longURL: url,
+                shortURL: shortid.generate(),
+                createdBy: authData.body.sub
+            });
+            // Save Link to DB and return it
+            const link = await newLink.save();
+            return link;
+        },
+        async deleteLink(_, { linkId }, context) {
+            // Obtain user ID from auth token
+            const authData = checkAuth(context);
+            try {
+                // Obtain Link from DB
+                const link = await Link.findById(linkId);
+                if (!link) {
+                    throw new UserInputError('Link does not exist');
+                }
+                // Check if auth user is the creator of the Link
+                if (link.createdBy.equals(authData.body.sub)) {
+                    // Delete Link from DB and return it
+                    await Link.deleteOne({ _id: linkId });
+                    return link;
+                } else {
+                    throw new AuthenticationError('Action not allowed');
+                }
+            } catch(err) {
+                throw new Error(err);
+            }
         }
     }
 };

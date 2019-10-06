@@ -1,56 +1,99 @@
 const url = require('url');
 const njwt = require('njwt');
 const bcrypt = require('bcryptjs');
+const { UserInputError } = require('apollo-server');
 
-const config = require('../../config');
-const User = require('../../models/user');
+const {
+    validateRegisterInput,
+    validateLoginInput
+} = require('../../utils/validators');
+const { SESSION } = require('../../config');
+const User = require('../../models/User');
+
+function createAuthToken(user, req) {
+    // Create a JWT for authentication
+    const token = njwt.create({
+        sub: user.id,
+        scope: 'default',
+        iss: url.format({
+            protocol: req.protocol,
+            host: req.get('host'),
+            pathname: ''
+        })
+    }, SESSION.KEY);
+    // Set token expiration date
+    token.setExpiration(new Date().getTime() + SESSION.LIFE);
+    // Return JWT as a compact token
+    return token.compact();
+}
 
 module.exports = {
-    createUser: async ({ input }) => {
-        try {
-            /* Check for existing user with the same email */
-            const existingUser = await User.findOne({ email: input.email });
-            if (existingUser) {
-                throw new Error('User already exists!');
+    Mutation: {
+        async register(
+            _,
+            {
+                registerInput: { username, email, password, confirmPassword }
+            },
+            context
+        ) {
+            // Validate user data
+            const { valid, errors } = validateRegisterInput(
+                username,
+                email,
+                password,
+                confirmPassword
+            );
+            if (!valid) {
+                throw new UserInputError('Errors', { errors });
             }
-            /* Hash plaintext password for safe storage in DB */
-            const hashedPassword = await bcrypt.hash(input.password, 12);
-            /* Create new User and save to DB */
-            const user = new User({
-                name: input.name,
-                email: input.email,
-                password: hashedPassword
+            // Check for existing user with the same email
+            const existingUser = await User.findOne({ email });
+            if (existingUser) {
+                throw new UserInputError('Email is taken', {
+                    errors: {
+                        email: 'This email is taken'
+                    }
+                });
+            }
+            // Hash password and create auth token
+            password = await bcrypt.hash(password, 12);
+            // Create new User and save to DB
+            const newUser = new User({
+                email,
+                username,
+                password
             });
-            const result = await user.save();
-            /* Return created User with blank password for security */
-            return { ...result._doc, password: null };
-        } catch(err) {
-            throw err;
+            const res = await newUser.save();
+            // Generate and return auth token
+            return {
+                token: createAuthToken(res, context.req)
+            };
+        },
+        async login(_, { loginInput: { email, password } }, context) {
+            // Validate user data
+            const { valid, errors } = validateLoginInput(
+                email,
+                password,
+            );
+            if (!valid) {
+                throw new UserInputError('Errors', { errors });
+            }
+            // Check for existing user with the same email
+            const user = await User.findOne({ email: email });
+            if (!user) {
+                errors.general = 'Incorrect credentials';
+                throw new UserInputError('Incorrect credentials', { errors });
+            }
+            // Check if password matches
+            const match = await bcrypt.compare(password, user.password);
+            if (!match) {
+                errors.general = 'Incorrect credentials';
+                throw new UserInputError('Incorrect credentials', { errors });
+            }
+            // Generate and return auth token
+            return {
+                token: createAuthToken(user, context.req)
+            };
         }
-    },
-    login: async ({ input }, req) => {
-        /* Check for existing user with the same email */
-        const user = await User.findOne({ email: input.email });
-        if (!user) {
-            throw new Error('Incorrect login credentials!');
-        }
-        /* Check if password matches */
-        const isMatch = await bcrypt.compare(input.password, user.password);
-        if (!isMatch) {
-            throw new Error('Incorrect login credentials!');
-        }
-        /* Create a JWT for authentication */
-        const token = njwt.create({
-            sub: user.id,
-            scope: 'default',
-            iss: url.format({
-                protocol: req.protocol,
-                host: req.get('host'),
-                pathname: ''
-            })
-        }, config.SESSION.KEY);
-        token.setExpiration(new Date().getTime() + config.SESSION.LIFE);
-        /* Return JWT as a compact token */
-        return { token: token.compact() };
     }
 };

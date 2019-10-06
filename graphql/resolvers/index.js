@@ -1,9 +1,12 @@
 const userResolver = require('./users');
 const linkResolver = require('./links');
 
-const rootResolver = {
-    ...userResolver,
-    ...linkResolver
+module.exports = {
+    Query: {
+        ...linkResolver.Query
+    },
+    Mutation: {
+        ...userResolver.Mutation,
+        ...linkResolver.Mutations
+    }
 };
-
-module.exports = rootResolver;

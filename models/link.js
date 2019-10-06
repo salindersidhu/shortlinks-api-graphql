@@ -1,25 +1,13 @@
-const mongoose = require('mongoose');
+const { model, Schema } = require('mongoose');
 
-/**
- * Define a mongoose schema representing links.
- */
-const linkSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    url: {
-        type: String,
-        required: true
-    },
-    short: {
-        type: String,
-        required: true
-    },
-    creator: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+const linkSchema = new Schema({
+    name: String,
+    longURL: String,
+    shortURL: String,
+    createdBy: {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
     }
 });
 
-module.exports = mongoose.model('Link', linkSchema);
+module.exports = model('Link', linkSchema);
