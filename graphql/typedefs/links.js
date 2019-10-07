@@ -20,7 +20,6 @@ module.exports = {
     `,
     mutations: `
         deleteLink(linkId: ID!): Link!
-        editLink(linkInput: LinkInput): Link!
         createLink(linkInput: LinkInput): Link!
     `
 };

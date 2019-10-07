@@ -4,6 +4,7 @@ const { UserInputError, AuthenticationError } = require('apollo-server');
 const Link = require('../../models/Link');
 const { TOKEN } = require('../../config');
 const { checkAuthToken  } = require('../../utils/auth-token');
+const { validateLinkInput } = require('../../utils/validators');
 
 module.exports = {
     Query: {
@@ -22,6 +23,11 @@ module.exports = {
         async createLink(_, { linkInput: { url, name } }, context) {
             // Check and obtain user ID from auth token
             const userId = checkAuthToken(TOKEN.KEY, context.req).sub;
+            // Validate input data
+            const { valid, errors } = validateLinkInput(url, name);
+            if (!valid) {
+                throw new UserInputError('Errors', { errors });
+            }
             // Create a new Link
             const newLink = new Link({
                 name,

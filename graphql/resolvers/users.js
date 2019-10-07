@@ -18,7 +18,7 @@ module.exports = {
             },
             context
         ) {
-            // Validate user data
+            // Validate input data
             const { valid, errors } = validateRegisterInput(
                 username,
                 email,
@@ -55,7 +55,7 @@ module.exports = {
             };
         },
         async login(_, { loginInput: { email, password } }, context) {
-            // Validate user data
+            // Validate input data
             const { valid, errors } = validateLoginInput(
                 email,
                 password,

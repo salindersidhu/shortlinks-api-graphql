@@ -34,5 +34,23 @@ module.exports = {
             errors,
             valid: Object.keys(errors).length < 1
         };
+    },
+    validateLinkInput: (url, name) => {
+        const errors = {};
+        if (name.trim() === '') {
+            errors.name = 'Name must not be empty';
+        }
+        if (url.trim() === '') {
+            errors.url = 'URL must not be empty';
+        } else {
+            const regEx = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
+            if (!url.match(regEx)) {
+                errors.url = 'URL must be a valid URL';
+            }
+        }
+        return {
+            errors,
+            valid: Object.keys(errors).length < 1
+        };
     }
 };
