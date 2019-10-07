@@ -4,7 +4,7 @@ const config = {
     development: {
         PORT: 8000,
         MONGODB: 'mongodb://localhost:27017/shortlinks',
-        SESSION: {
+        TOKEN: {
             LIFE: 3600000,
             KEY: '7ED57FEA236E486B3255715263213'
         }
@@ -12,7 +12,7 @@ const config = {
     production: {
         PORT: 443,
         MONGODB: '',
-        SESSION: {
+        TOKEN: {
             LIFE: 36000000,
             KEY: crypto.randomBytes(256).toString('hex')
         }

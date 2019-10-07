@@ -7,10 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js"
   },
-  "graphdoc": {
-    "endpoint": "http://localhost:8000/graphql",
-    "output": "./docs"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/salindersidhu/shortlinks.git"

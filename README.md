@@ -51,11 +51,15 @@ npm start
     │    ├── resolvers              # GraphQL resolvers
     │    │   ├── index.js           # Root resolver
     │    │   └── ...
-    │    ├── typedefs.js            # GraphQL schema type defitions
+    │    ├── typedefs               # GraphQL typedefs
+    │    │   ├── index.js           # Root typedef
+    │    │   └── ...
     │    └── ...
     ├── models                      # DB models
     │   └── ...
     ├── utils                       # Utility functions
+    │   ├── auth-token.js           # Authentication token utils
+    │   ├── validators.js           # Server side form input validators
     │   └── ...
     ├── index.js                    # Main server logic
     ├── config.js                   # Server config

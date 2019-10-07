@@ -1,31 +1,13 @@
-const url = require('url');
-const njwt = require('njwt');
 const bcrypt = require('bcryptjs');
 const { UserInputError } = require('apollo-server');
 
-const {
-    validateRegisterInput,
-    validateLoginInput
-} = require('../../utils/validators');
-const { SESSION } = require('../../config');
 const User = require('../../models/User');
-
-function createAuthToken(user, req) {
-    // Create a JWT for authentication
-    const token = njwt.create({
-        sub: user.id,
-        scope: 'default',
-        iss: url.format({
-            protocol: req.protocol,
-            host: req.get('host'),
-            pathname: ''
-        })
-    }, SESSION.KEY);
-    // Set token expiration date
-    token.setExpiration(new Date().getTime() + SESSION.LIFE);
-    // Return JWT as a compact token
-    return token.compact();
-}
+const { TOKEN } = require('../../config');
+const { createAuthToken  } = require('../../utils/auth-token');
+const {
+    validateLoginInput,
+    validateRegisterInput
+} = require('../../utils/validators');
 
 module.exports = {
     Mutation: {
@@ -66,7 +48,10 @@ module.exports = {
             const res = await newUser.save();
             // Generate and return auth token
             return {
-                token: createAuthToken(res, context.req)
+                token: createAuthToken({
+                    sub: res.id,
+                    scope: 'default'
+                }, TOKEN.KEY, TOKEN.LIFE, context.req)
             };
         },
         async login(_, { loginInput: { email, password } }, context) {
@@ -92,7 +77,10 @@ module.exports = {
             }
             // Generate and return auth token
             return {
-                token: createAuthToken(user, context.req)
+                token: createAuthToken({
+                    sub: user.id,
+                    scope: 'default'
+                }, TOKEN.KEY, TOKEN.LIFE, context.req)
             };
         }
     }
