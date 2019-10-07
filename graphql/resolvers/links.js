@@ -12,8 +12,21 @@ module.exports = {
             // Check if user is authenticated
             checkAuthToken(TOKEN.KEY, context.req);
             try {
-                const links = await Link.find();
-                return links;
+                return await Link.find();
+            } catch(err) {
+                throw new Error(err);
+            }
+        },
+        async getLink(_, { linkId }, context) {
+            // Check if user is authenticated
+            checkAuthToken(TOKEN.KEY, context.req);
+            try {
+                const link = await Link.findById(linkId);
+                if (link) {
+                    return link;
+                } else {
+                    throw new UserInputError('Link not found');
+                }
             } catch(err) {
                 throw new Error(err);
             }
@@ -35,9 +48,35 @@ module.exports = {
                 shortURL: shortid.generate(),
                 createdBy: userId
             });
-            // Save Link to DB and return it
-            const link = await newLink.save();
-            return link;
+            // Save and return Link to DB
+            return await newLink.save();
+        },
+        async editLink(_, { linkInput: { _id, url, name } }, context) {
+            // Check and obtain user ID from auth token
+            const userId = checkAuthToken(TOKEN.KEY, context.req).sub;
+            // Validate input data
+            const { valid, errors } = validateLinkInput(url, name);
+            if (!valid) {
+                throw new UserInputError('Errors', { errors });
+            }
+            try {
+                // Obtain Link from DB
+                const link = await Link.findById(_id);
+                if (!link) {
+                    throw new UserInputError('Link not found');
+                }
+                // Check if auth user is the creator of the Link
+                if (link.createdBy.equals(userId)) {
+                    // Update, save and return Link from DB
+                    link.name = name;
+                    link.longURL = url;
+                    return await link.save();
+                } else {
+                    throw new AuthenticationError('Action not allowed');
+                }
+            } catch(err) {
+                throw new Error(err);
+            }
         },
         async deleteLink(_, { linkId }, context) {
             // Check and obtain user ID from auth token
@@ -46,7 +85,7 @@ module.exports = {
                 // Obtain Link from DB
                 const link = await Link.findById(linkId);
                 if (!link) {
-                    throw new UserInputError('Link does not exist');
+                    throw new UserInputError('Link not found');
                 }
                 // Check if auth user is the creator of the Link
                 if (link.createdBy.equals(userId)) {

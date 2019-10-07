@@ -17,9 +17,11 @@ module.exports = {
     `,
     queries: `
         getLinks: [Link!]
+        getLink(linkId: ID!): Link!
     `,
     mutations: `
         deleteLink(linkId: ID!): Link!
+        editLink(linkInput: LinkInput): Link!
         createLink(linkInput: LinkInput): Link!
     `
 };
