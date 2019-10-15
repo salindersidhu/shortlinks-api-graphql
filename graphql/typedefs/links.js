@@ -21,6 +21,10 @@ module.exports = {
             """
             shortURL: String!
             """
+            Determines if the link is enabled or disabled.
+            """
+            active: Boolean
+            """
             User who created the Link.
             """
             createdBy: ID!
@@ -43,6 +47,10 @@ module.exports = {
             Link name.
             """
             name: String!
+            """
+            Determines if the link is enabled or disabled.
+            """
+            active: Boolean
         }
     `,
     queries: `

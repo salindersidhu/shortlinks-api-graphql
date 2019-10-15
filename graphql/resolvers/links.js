@@ -51,7 +51,7 @@ module.exports = {
             // Save and return Link to DB
             return await newLink.save();
         },
-        async editLink(_, { linkInput: { _id, url, name } }, context) {
+        async editLink(_, { linkInput: { _id, url, name, active } }, context) {
             // Check and obtain user ID from auth token
             const userId = checkAuthToken(TOKEN.KEY, context.req).sub;
             // Validate input data
@@ -70,6 +70,7 @@ module.exports = {
                     // Update, save and return Link from DB
                     link.name = name;
                     link.longURL = url;
+                    link.active = active;
                     return await link.save();
                 } else {
                     throw new AuthenticationError('Action not allowed');
