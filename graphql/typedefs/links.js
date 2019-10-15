@@ -28,6 +28,14 @@ module.exports = {
             User who created the Link.
             """
             createdBy: ID!
+            """
+            Created at timestamp.
+            """
+            createdAt: String!
+            """
+            Last modified at timestamp.
+            """
+            updatedAt: String!
         }
     `,
     inputs: `
