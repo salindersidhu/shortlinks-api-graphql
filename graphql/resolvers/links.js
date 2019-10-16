@@ -9,24 +9,18 @@ const { validateLinkInput } = require('../../utils/validators');
 module.exports = {
     Query: {
         async getLinks(_, {}, context) {
-            // Check if user is authenticated
-            checkAuthToken(TOKEN.KEY, context.req);
+            // Check and obtain user ID from auth token
+            const userId = checkAuthToken(TOKEN.KEY, context.req).sub;
             try {
-                return await Link.find();
+                return await Link.find({ createdBy: userId });
             } catch(err) {
                 throw new Error(err);
             }
         },
-        async getLink(_, { linkId }, context) {
-            // Check if user is authenticated
-            checkAuthToken(TOKEN.KEY, context.req);
+        async getPublicLinks(_, {}) {
             try {
-                const link = await Link.findById(linkId);
-                if (link) {
-                    return link;
-                } else {
-                    throw new UserInputError('Link not found');
-                }
+                // Return subset of Link (URLs and active flag)
+                return Link.find({ active: true }, 'shortURL longURL');
             } catch(err) {
                 throw new Error(err);
             }

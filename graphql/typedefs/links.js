@@ -63,22 +63,15 @@ module.exports = {
     `,
     queries: `
         """
-        Fetch all Links.
+        Fetch all active links (only returns URL strings).
+        """
+        getPublicLinks: [Link!]
+        """
+        Fetch all Links belonging to the authenticated user.
 
         [Requires Authentication]
         """
         getLinks: [Link!]
-        """
-        Fetch an existing Link.
-
-        [Requires Authentication]
-        """
-        getLink(
-            """
-            Object ID of an existing Link.
-            """
-            linkId: ID!
-        ): Link!
     `,
     mutations: `
         """
