@@ -3,8 +3,12 @@ const { UserInputError } = require('apollo-server');
 
 const Link = require('../../models/Link');
 const { TOKEN } = require('../../config');
-const { checkAuthToken  } = require('../../utils/auth-token');
-const { validateLinkInput } = require('../../utils/validators');
+const { checkAuthToken } = require('../../utils/auth-token');
+const {
+    validateCreateLinkInput,
+    validateEditLinkInput,
+    validateDeleteLinkInput
+} = require('../../utils/validators');
 
 module.exports = {
     Query: {
@@ -31,7 +35,7 @@ module.exports = {
             // Check and obtain user ID from auth token
             const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
             // Validate input data
-            const { valid, errors } = validateLinkInput(url, name);
+            const { valid, errors } = validateCreateLinkInput(url, name);
             if (!valid) {
                 throw new UserInputError('Errors', { errors });
             }
@@ -49,7 +53,7 @@ module.exports = {
             // Check and obtain user ID from auth token
             const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
             // Validate input data
-            const { valid, errors } = validateLinkInput(url, name);
+            const { valid, errors } = validateEditLinkInput(_id, url, name, active);
             if (!valid) {
                 throw new UserInputError('Errors', { errors });
             }
@@ -72,6 +76,11 @@ module.exports = {
         async deleteLink(_, { linkId }, context) {
             // Check and obtain user ID from auth token
             const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
+            // Validate input data
+            const { valid, errors } = validateDeleteLinkInput(_id);
+            if (!valid) {
+                throw new UserInputError('Errors', { errors });
+            }
             try {
                 // Obtain user owned Link from DB
                 const link = await Link.findOne({

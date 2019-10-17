@@ -21,9 +21,9 @@ module.exports = {
             """
             shortURL: String!
             """
-            Determines if the link is enabled or disabled.
+            Determines if the link is active or disabled.
             """
-            active: Boolean
+            active: Boolean!
             """
             User who created the Link.
             """
@@ -40,13 +40,26 @@ module.exports = {
     `,
     inputs: `
         """
-        Link input.
+        New Link input.
         """
-        input LinkInput {
+        input CreateLinkInput {
             """
-            Object ID of Link.
+            Link URL.
             """
-            _id: String
+            url: String!
+            """
+            Link name.
+            """
+            name: String!
+        }
+        """
+        Edit Link input.
+        """
+        input EditLinkInput {
+            """
+            Object ID of an existing Link.
+            """
+            _id: String!
             """
             Link URL.
             """
@@ -56,9 +69,18 @@ module.exports = {
             """
             name: String
             """
-            Determines if the link is enabled or disabled.
+            Determines if the link is active or disabled.
             """
             active: Boolean
+        }
+        """
+        Delete Link input.
+        """
+        input DeleteLinkInput {
+            """
+            Object ID of an existing Link.
+            """
+            _id: String!
         }
     `,
     queries: `
@@ -75,27 +97,22 @@ module.exports = {
     `,
     mutations: `
         """
-        Delete an existing Link.
+        Create a new Link.
 
         [Requires Authentication]
         """
-        deleteLink(
-            """
-            Object ID of an existing Link.
-            """
-            linkId: ID!
-        ): Link!
+        createLink(input: CreateLinkInput): Link!
         """
         Edit an existing Link.
 
         [Requires Authentication]
         """
-        editLink(linkInput: LinkInput): Link!
+        editLink(input: EditLinkInput): Link!
         """
-        Create a new Link.
+        Delete an existing Link.
 
         [Requires Authentication]
         """
-        createLink(linkInput: LinkInput): Link!
+        deleteLink(input: DeleteLinkInput): Link!
     `
 };

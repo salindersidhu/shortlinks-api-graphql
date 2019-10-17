@@ -50,10 +50,10 @@ module.exports = {
         """
         Login and authenticate an existing User.
         """
-        login(loginInput: LoginInput): AuthData!
+        login(input: LoginInput): AuthData!
         """
         Register and authenticate a new User.
         """
-        register(registerInput: RegisterInput): AuthData!
+        register(input: RegisterInput): AuthData!
     `
 };
