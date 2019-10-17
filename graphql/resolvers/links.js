@@ -1,5 +1,5 @@
 const shortid = require('shortid');
-const { UserInputError, AuthenticationError } = require('apollo-server');
+const { UserInputError } = require('apollo-server');
 
 const Link = require('../../models/Link');
 const { TOKEN } = require('../../config');
@@ -10,7 +10,7 @@ module.exports = {
     Query: {
         async getLinks(_, {}, context) {
             // Check and obtain user ID from auth token
-            const userId = checkAuthToken(TOKEN.KEY, context.req).sub;
+            const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
             try {
                 return await Link.find({ createdBy: userId });
             } catch(err) {
@@ -29,7 +29,7 @@ module.exports = {
     Mutations: {
         async createLink(_, { linkInput: { url, name } }, context) {
             // Check and obtain user ID from auth token
-            const userId = checkAuthToken(TOKEN.KEY, context.req).sub;
+            const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
             // Validate input data
             const { valid, errors } = validateLinkInput(url, name);
             if (!valid) {
@@ -47,49 +47,46 @@ module.exports = {
         },
         async editLink(_, { linkInput: { _id, url, name, active } }, context) {
             // Check and obtain user ID from auth token
-            const userId = checkAuthToken(TOKEN.KEY, context.req).sub;
+            const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
             // Validate input data
             const { valid, errors } = validateLinkInput(url, name);
             if (!valid) {
                 throw new UserInputError('Errors', { errors });
             }
             try {
-                // Obtain Link from DB
-                const link = await Link.findById(_id);
+                // Obtain user owned Link from DB
+                const link = await Link.findOne({ _id, createdBy: userId });
                 if (!link) {
                     throw new UserInputError('Link not found');
                 }
-                // Check if auth user is the creator of the Link
-                if (link.createdBy.equals(userId)) {
-                    // Update, save and return Link from DB
-                    link.name = name;
-                    link.longURL = url;
-                    link.active = active;
-                    return await link.save();
-                } else {
-                    throw new AuthenticationError('Action not allowed');
-                }
+                // Update fields if they exist in input
+                link.name = name !== undefined ? name : link.name;
+                link.longURL = url !== undefined ? url : link.longURL;
+                link.active = active !== undefined ? active : link.active;
+                // Save and return Link from DB
+                return await link.save();
             } catch(err) {
                 throw new Error(err);
             }
         },
         async deleteLink(_, { linkId }, context) {
             // Check and obtain user ID from auth token
-            const userId = checkAuthToken(TOKEN.KEY, context.req).sub;
+            const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
             try {
-                // Obtain Link from DB
-                const link = await Link.findById(linkId);
+                // Obtain user owned Link from DB
+                const link = await Link.findOne({
+                    _id: linkId,
+                    createdBy: userId
+                });
                 if (!link) {
                     throw new UserInputError('Link not found');
                 }
-                // Check if auth user is the creator of the Link
-                if (link.createdBy.equals(userId)) {
-                    // Delete Link from DB and return it
-                    await Link.deleteOne({ _id: linkId });
-                    return link;
-                } else {
-                    throw new AuthenticationError('Action not allowed');
-                }
+                // Delete Link from DB and return it
+                await Link.deleteOne({
+                    _id: linkId,
+                    createdBy: userId
+                });
+                return link;
             } catch(err) {
                 throw new Error(err);
             }

@@ -50,11 +50,11 @@ module.exports = {
             """
             Link URL.
             """
-            url: String!
+            url: String
             """
             Link name.
             """
-            name: String!
+            name: String
             """
             Determines if the link is enabled or disabled.
             """
