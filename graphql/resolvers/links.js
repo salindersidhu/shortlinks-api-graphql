@@ -24,14 +24,18 @@ module.exports = {
         async getPublicLinks(_, {}) {
             try {
                 // Return subset of Link (URLs and active flag)
-                return Link.find({ active: true }, 'shortURL longURL');
+                return Link.find({
+                    active: true
+                }, {
+                    '_id': 0, 'shortURL': 1, 'longURL': 1
+                });
             } catch(err) {
                 throw new Error(err);
             }
         }
     },
     Mutations: {
-        async createLink(_, { linkInput: { url, name } }, context) {
+        async createLink(_, { input: { url, name } }, context) {
             // Check and obtain user ID from auth token
             const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
             // Validate input data
@@ -49,11 +53,11 @@ module.exports = {
             // Save and return Link to DB
             return await newLink.save();
         },
-        async editLink(_, { linkInput: { _id, url, name, active } }, context) {
+        async editLink(_, { input: { _id, url, name, active } }, context) {
             // Check and obtain user ID from auth token
             const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
             // Validate input data
-            const { valid, errors } = validateEditLinkInput(_id, url, name, active);
+            const { valid, errors } = validateEditLinkInput(_id, url, name);
             if (!valid) {
                 throw new UserInputError('Errors', { errors });
             }
@@ -73,7 +77,7 @@ module.exports = {
                 throw new Error(err);
             }
         },
-        async deleteLink(_, { linkId }, context) {
+        async deleteLink(_, { input: { _id } }, context) {
             // Check and obtain user ID from auth token
             const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
             // Validate input data
@@ -84,7 +88,7 @@ module.exports = {
             try {
                 // Obtain user owned Link from DB
                 const link = await Link.findOne({
-                    _id: linkId,
+                    _id,
                     createdBy: userId
                 });
                 if (!link) {
@@ -92,7 +96,7 @@ module.exports = {
                 }
                 // Delete Link from DB and return it
                 await Link.deleteOne({
-                    _id: linkId,
+                    _id,
                     createdBy: userId
                 });
                 return link;

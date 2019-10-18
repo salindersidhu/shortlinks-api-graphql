@@ -1,4 +1,4 @@
-const { REGEX_EMAIL, REGEX_URL } = require('./regex');
+const { REGEX_EMAIL, REGEX_URL, REGEX_MONGODB_ID } = require('./regex');
 
 module.exports = {
     validateRegisterInput: (username, email, password, confirmPassword) => {
@@ -53,12 +53,12 @@ module.exports = {
             valid: Object.keys(errors).length < 1
         };
     },
-    validateEditLinkInput: (_id, url, name, active) => {
+    validateEditLinkInput: (_id, url, name) => {
         const errors = {};
         if (_id.trim() === '') {
             errors.url = 'ID must not be empty';
         } else {
-            if (!_id.match(REGEX_MONGO_ID)) {
+            if (!_id.match(REGEX_MONGODB_ID)) {
                 errors.url = 'ID must be a valid mongoDB ID';
             }
         }
@@ -71,11 +71,8 @@ module.exports = {
                 }
             }
         }
-        if (name !== undefined && name.trim() !== '') {
+        if (name !== undefined && name.trim() === '') {
             errors.name = 'Name must not be empty';
-        }
-        if (active !== undefined && typeof active === 'boolean') {
-            errors.name = 'Active must be either true or false';
         }
         return {
             errors,
@@ -87,7 +84,7 @@ module.exports = {
         if (_id.trim() === '') {
             errors.url = 'ID must not be empty';
         } else {
-            if (!_id.match(REGEX_MONGO_ID)) {
+            if (!_id.match(REGEX_MONGODB_ID)) {
                 errors.url = 'ID must be a valid mongoDB ID';
             }
         }

@@ -11,13 +11,9 @@ const {
 
 module.exports = {
     Mutation: {
-        async register(
-            _,
-            {
-                registerInput: { username, email, password, confirmPassword }
-            },
-            context
-        ) {
+        async register(_, {
+            input: { username, email, password, confirmPassword }
+        }, context) {
             // Validate input data
             const { valid, errors } = validateRegisterInput(
                 username,
@@ -54,7 +50,7 @@ module.exports = {
                 }, TOKEN.KEY, TOKEN.LIFE, context.req)
             };
         },
-        async login(_, { loginInput: { email, password } }, context) {
+        async login(_, { input: { email, password } }, context) {
             // Validate input data
             const { valid, errors } = validateLoginInput(
                 email,
