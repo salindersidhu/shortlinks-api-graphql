@@ -45,7 +45,7 @@ module.exports = {
     },
     validateEditLinkInput: (_id, url, name, active) => {
         const errors = {};
-        const fields = [_id, url, name, active];
+        const fields = [url, name, active];
         if (_id.trim() === '') {
             errors.url = 'ID must not be empty';
         } else if (!_id.match(REGEX_ID)) {
@@ -62,11 +62,11 @@ module.exports = {
             errors.name = 'Name must not be empty';
         }
         // Validate that at least one field of (url, name, active) is provided
-        const numUndefined = fields.reduce((accumulator, item) => {
-            return accumulator + (item === undefined ? 1 : 0);
-        });
+        const numUndefined = fields.reduce((accumulator, field) => {
+            return accumulator + (field === undefined ? 1 : 0);
+        }, 0);
         if (numUndefined === fields.length) {
-            errors.name = 'Must provide at least one of url, name or active';
+            errors.general = 'Must provide at least one of url, name or active';
         }
         return { errors, valid: Object.keys(errors).length < 1 };
     },

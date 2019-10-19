@@ -57,7 +57,7 @@ module.exports = {
             // Check and obtain user ID from auth token
             const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
             // Validate input data
-            const { valid, errors } = validateEditLinkInput(_id, url, name);
+            const { valid, errors } = validateEditLinkInput(_id, url, name, active);
             if (!valid) {
                 throw new UserInputError('Errors', { errors });
             }
