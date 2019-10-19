@@ -1,4 +1,6 @@
-const { REGEX_EMAIL, REGEX_URL, REGEX_MONGODB_ID } = require('./regex');
+const REGEX_ID = /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i;
+const REGEX_URL = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
+const REGEX_EMAIL = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/;
 
 module.exports = {
     validateRegisterInput: (username, email, password, confirmPassword) => {
@@ -8,20 +10,15 @@ module.exports = {
         }
         if (email.trim() === '') {
             errors.email = 'Email must not be empty';
-        } else {
-            if (!email.match(REGEX_EMAIL)) {
-                errors.email = 'Email must be a valid email address';
-            }
+        } else if (!email.match(REGEX_EMAIL)) {
+            errors.email = 'Email must be a valid email address';
         }
         if (password === '') {
             errors.password = 'Password must not be empty';
         } else if (password !== confirmPassword) {
             errors.confirmPassword = 'Passwords must match';
         }
-        return {
-            errors,
-            valid: Object.keys(errors).length < 1
-        };
+        return { errors, valid: Object.keys(errors).length < 1 };
     },
     validateLoginInput: (email, password) => {
         const errors = {};
@@ -31,10 +28,7 @@ module.exports = {
         if (password.trim() === '') {
             errors.password = 'Password must not be empty';
         }
-        return {
-            errors,
-            valid: Object.keys(errors).length < 1
-        };
+        return { errors, valid: Object.keys(errors).length < 1 };
     },
     validateCreateLinkInput: (url, name) => {
         const errors = {};
@@ -43,54 +37,46 @@ module.exports = {
         }
         if (url.trim() === '') {
             errors.url = 'URL must not be empty';
-        } else {
-            if (!url.match(REGEX_URL)) {
-                errors.url = 'URL must be a valid URL';
-            }
         }
-        return {
-            errors,
-            valid: Object.keys(errors).length < 1
-        };
+        if (!url.match(REGEX_URL)) {
+            errors.url = 'URL must be a valid URL';
+        }
+        return { errors, valid: Object.keys(errors).length < 1 };
     },
-    validateEditLinkInput: (_id, url, name) => {
+    validateEditLinkInput: (_id, url, name, active) => {
         const errors = {};
+        const fields = [_id, url, name, active];
         if (_id.trim() === '') {
             errors.url = 'ID must not be empty';
-        } else {
-            if (!_id.match(REGEX_MONGODB_ID)) {
-                errors.url = 'ID must be a valid mongoDB ID';
-            }
+        } else if (!_id.match(REGEX_ID)) {
+            errors.url = 'ID must be a valid MongoDB ID';
         }
         if (url !== undefined) {
             if (url.trim() === '') {
                 errors.url = 'URL must not be empty';
-            } else {
-                if (!url.match(REGEX_URL)) {
-                    errors.url = 'URL must be a valid URL';
-                }
+            } else if (!url.match(REGEX_URL)) {
+                errors.url = 'URL must be a valid URL';
             }
         }
         if (name !== undefined && name.trim() === '') {
             errors.name = 'Name must not be empty';
         }
-        return {
-            errors,
-            valid: Object.keys(errors).length < 1
-        };
+        // Validate that at least one field of (url, name, active) is provided
+        const numUndefined = fields.reduce((accumulator, item) => {
+            return accumulator + (item === undefined ? 1 : 0);
+        });
+        if (numUndefined === fields.length) {
+            errors.name = 'Must provide at least one of url, name or active';
+        }
+        return { errors, valid: Object.keys(errors).length < 1 };
     },
     validateDeleteLinkInput: (_id) => {
         const errors = {};
         if (_id.trim() === '') {
             errors.url = 'ID must not be empty';
-        } else {
-            if (!_id.match(REGEX_MONGODB_ID)) {
-                errors.url = 'ID must be a valid mongoDB ID';
-            }
+        } else if (!_id.match(REGEX_ID)) {
+            errors.url = 'ID must be a valid MongoDB ID';
         }
-        return {
-            errors,
-            valid: Object.keys(errors).length < 1
-        };
+        return { errors, valid: Object.keys(errors).length < 1 };
     }
 };
