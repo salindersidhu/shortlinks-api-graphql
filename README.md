@@ -6,7 +6,6 @@
     * [Prerequisites](#Prerequisites)
     * [Running](#running)
     * [Contributing](#contributing)
-    * [Building](#building)
 * [Codebase](#codebase)
     * [Structure](#structure)
 
@@ -33,13 +32,7 @@ npm start
 ```
 
 ## Contributing
-Scriber welcomes contributions from anyone and everyone. Please see our [contributing guide](/CONTRIBUTING.md) for more info.
-
-## Building
-First run start the GraphQL API server using the following command:
-```bash
-npm start
-```
+Shortlinks Api GraphQL welcomes contributions from anyone and everyone. Please see our [contributing guide](/CONTRIBUTING.md) for more info.
 
 # Codebase
 > Information describing the software architecture and how to maintain it while adding additional functionality.
