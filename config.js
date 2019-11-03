@@ -2,14 +2,16 @@ const crypto = require('crypto');
 
 const config = {
     development: {
+        SSL: false,
         PORT: 8000,
         MONGODB: 'mongodb://localhost:27017/shortlinks',
         TOKEN: {
-            LIFE: 3600000,
+            LIFE: 36000000,
             KEY: '7ED57FEA236E486B3255715263213'
         }
     },
     production: {
+        SSL: true,
         PORT: 443,
         MONGODB: '',
         TOKEN: {

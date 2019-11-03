@@ -57,22 +57,19 @@ module.exports = {
             // Check and obtain user ID from auth token
             const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
             // Validate input data
-            const { valid, errors } = validateEditLinkInput(_id, url, name, active);
+            const { valid, errors } = validateEditLinkInput(_id, url, name);
             if (!valid) {
                 throw new UserInputError('Errors', { errors });
             }
             try {
-                // Obtain user owned Link from DB
-                const link = await Link.findOne({ _id, createdBy: userId });
-                if (!link) {
-                    throw new UserInputError('Link not found');
-                }
-                // Update fields if they exist in input
-                link.name = name !== undefined ? name : link.name;
-                link.longURL = url !== undefined ? url : link.longURL;
-                link.active = active !== undefined ? active : link.active;
-                // Save and return Link from DB
-                return await link.save();
+                // Obtain and update user owned Link from DB
+                await Link.updateOne({
+                    _id, createdBy: userId
+                },{
+                    longURL: url, name, active
+                });
+                // Obtain and return updated Link from DB
+                return await Link.findOne({ _id, createdBy: userId });
             } catch(err) {
                 throw new Error(err);
             }
