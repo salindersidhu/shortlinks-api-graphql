@@ -1,22 +1,41 @@
+const fs = require('fs');
+const http = require('http');
+const https = require('https');
+const express = require('express');
 const mongoose = require('mongoose');
-const { ApolloServer } = require('apollo-server');
+const { ApolloServer } = require('apollo-server-express');
 
-const { MONGODB, PORT } = require('./config');
 const typeDefs = require('./graphql/typedefs');
 const resolvers = require('./graphql/resolvers');
+const {
+    SSL,
+    PORT,
+    MONGODB,
+    HOSTNAME
+} = require('./config');
 
-const server = new ApolloServer({
+const apollo = new ApolloServer({
     typeDefs,
     resolvers,
     context: ({ req }) => ({ req })
 });
+
+const app = express();
+apollo.applyMiddleware({ app });
+
+const server = SSL ? https.createServer({
+    key: fs.readFileSync(SSL.KEY), crt: fs.readFileSync(SSL.CRT)
+}, app) : http.createServer(app);
 
 mongoose.connect(MONGODB, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
     console.log('Database connected');
-    return server.listen({ port: PORT });
-}).then(res => {
-    console.log(`Server running at ${res.url}`);
+    return server.listen({ port: PORT, host: HOSTNAME });
+}).then(() => {
+    console.log(
+        'Server running at',
+        `http${SSL ? 's' : ''}://${HOSTNAME}:${PORT}${apollo.graphqlPath}`
+    );
 });

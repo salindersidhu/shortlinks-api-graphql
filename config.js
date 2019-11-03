@@ -4,6 +4,7 @@ const config = {
     development: {
         SSL: false,
         PORT: 8000,
+        HOSTNAME: 'localhost',
         MONGODB: 'mongodb://localhost:27017/shortlinks',
         TOKEN: {
             LIFE: 36000000,
@@ -11,8 +12,12 @@ const config = {
         }
     },
     production: {
-        SSL: true,
+        SSL: {
+            KEY: './.ssl/server.key',
+            CRT: './.ssl/server.crt'
+        },
         PORT: 443,
+        HOSTNAME: '',
         MONGODB: '',
         TOKEN: {
             LIFE: 36000000,

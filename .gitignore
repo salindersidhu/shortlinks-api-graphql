@@ -1,6 +1,9 @@
 # Mac
 .DS_Store
 
+# SSL folder
+.ssl
+
 # IDE - VSCode
 .vscode
 
