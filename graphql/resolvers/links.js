@@ -1,4 +1,4 @@
-const shortid = require('shortid');
+const sh = require('shorthash');
 const { UserInputError } = require('apollo-server');
 
 const Link = require('../../models/Link');
@@ -47,7 +47,7 @@ module.exports = {
             const newLink = new Link({
                 name,
                 longURL: url,
-                shortURL: shortid.generate(),
+                shortURL: sh.unique(url),
                 createdBy: userId
             });
             // Save and return Link to DB
