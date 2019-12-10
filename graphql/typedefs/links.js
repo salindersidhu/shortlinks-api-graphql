@@ -61,10 +61,6 @@ module.exports = {
             """
             _id: String!
             """
-            Link URL.
-            """
-            url: String!
-            """
             Link name.
             """
             name: String!

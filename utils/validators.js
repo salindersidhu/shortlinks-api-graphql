@@ -41,16 +41,13 @@ module.exports = {
         }
         return { errors, valid: Object.keys(errors).length < 1 };
     },
-    validateEditLinkInput: (_id, url, name) => {
+    validateEditLinkInput: (_id, name) => {
         const errors = {};
         if (!_id.match(REGEX_ID)) {
             errors.url = 'ID must be a valid MongoDB ID';
         }
         if (name.trim() === '') {
             errors.name = 'Name must not be empty';
-        }
-        if (!url.match(REGEX_URL)) {
-            errors.url = 'URL must be a valid URL';
         }
         return { errors, valid: Object.keys(errors).length < 1 };
     },

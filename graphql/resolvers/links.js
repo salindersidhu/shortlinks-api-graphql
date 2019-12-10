@@ -1,4 +1,4 @@
-const sh = require('shorthash');
+const shorthash = require('shorthash');
 const { UserInputError } = require('apollo-server');
 
 const Link = require('../../models/Link');
@@ -43,31 +43,42 @@ module.exports = {
             if (!valid) {
                 throw new UserInputError('Errors', { errors });
             }
-            // Create a new Link
+            // Check for an existing link created by this user
+            const existingLink = await Link.findOne({ 
+                longURL: url,
+                createdBy: userId
+            });
+            if (existingLink) {
+                throw new UserInputError('Link with URL exists', {
+                    errors: {
+                        url: 'You previously created a Link using this URL'
+                    }
+                });
+            }
+            /**
+             * Create a new link using shorthash as the short url. Use the
+             * user ID with the url for the shorthash to ensure uniqueness.
+             */
             const newLink = new Link({
                 name,
                 longURL: url,
-                shortURL: sh.unique(url),
+                shortURL: shorthash.unique(userId + url),
                 createdBy: userId
             });
             // Save and return Link to DB
             return await newLink.save();
         },
-        async editLink(_, { input: { _id, url, name, active } }, context) {
+        async editLink(_, { input: { _id, name, active } }, context) {
             // Check and obtain user ID from auth token
             const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
             // Validate input data
-            const { valid, errors } = validateEditLinkInput(_id, url, name);
+            const { valid, errors } = validateEditLinkInput(_id, name);
             if (!valid) {
                 throw new UserInputError('Errors', { errors });
             }
             try {
                 // Obtain and update user owned Link from DB
-                await Link.updateOne({
-                    _id, createdBy: userId
-                },{
-                    longURL: url, name, active
-                });
+                await Link.updateOne({ _id, createdBy: userId }, { name, active });
                 // Obtain and return updated Link from DB
                 return await Link.findOne({ _id, createdBy: userId });
             } catch(err) {
