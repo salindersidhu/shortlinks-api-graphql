@@ -32,10 +32,10 @@ mongoose.connect(MONGODB, {
     useUnifiedTopology: true
 }).then(() => {
     console.log('Database connected');
-    return server.listen({ port: PORT, host: HOSTNAME });
+    return server.listen({ port: PORT });
 }).then(() => {
     console.log(
         'Server running at',
-        `http${SSL ? 's' : ''}://${HOSTNAME}:${PORT}${apollo.graphqlPath}`
+        `http${SSL ? 's' : ''}://localhost:${PORT}${apollo.graphqlPath}`
     );
 });
