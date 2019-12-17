@@ -27,7 +27,7 @@ module.exports = {
                 return Link.find({
                     active: true
                 }, {
-                    '_id': 0, 'shortURL': 1, 'longURL': 1
+                    '_id': 0, 'hash': 1, 'url': 1
                 });
             } catch(err) {
                 throw new Error(err);
@@ -44,10 +44,7 @@ module.exports = {
                 throw new UserInputError('Errors', { errors });
             }
             // Check for an existing link created by this user
-            const existingLink = await Link.findOne({ 
-                longURL: url,
-                createdBy: userId
-            });
+            const existingLink = await Link.findOne({ url, createdBy: userId });
             if (existingLink) {
                 throw new UserInputError('Link with URL exists', {
                     errors: {
@@ -60,9 +57,9 @@ module.exports = {
              * user ID with the url for the shorthash to ensure uniqueness.
              */
             const newLink = new Link({
+                url,
                 name,
-                longURL: url,
-                shortURL: shorthash.unique(userId + url),
+                hash: shorthash.unique(userId + url),
                 createdBy: userId
             });
             // Save and return Link to DB

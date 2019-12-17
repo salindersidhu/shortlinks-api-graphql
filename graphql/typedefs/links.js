@@ -13,13 +13,13 @@ module.exports = {
             """
             name: String
             """
-            Original Link URL.
+            Link URL.
             """
-            longURL: String!
+            url: String!
             """
-            Short UUID representing the Link.
+            Hash representing the URL.
             """
-            shortURL: String!
+            hash: String!
             """
             Determines if the link is active or disabled.
             """
