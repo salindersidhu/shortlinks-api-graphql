@@ -1,12 +1,12 @@
 const shorthash = require('shorthash');
 const { UserInputError } = require('apollo-server');
 
-const Link = require('../../models/Link');
 const { TOKEN } = require('../../config');
+const { Link, Stats } = require('../../models');
 const { checkAuthToken } = require('../../utils/auth-token');
 const {
-    validateCreateLinkInput,
     validateEditLinkInput,
+    validateCreateLinkInput,
     validateDeleteLinkInput
 } = require('../../utils/validators');
 
@@ -62,6 +62,10 @@ module.exports = {
                 hash: shorthash.unique(userId + url),
                 createdBy: userId
             });
+            // Generate stats for the new Link
+            await new Stats({
+                link: newLink._id
+            }).save();
             // Save and return Link to DB
             return await newLink.save();
         },
@@ -103,6 +107,10 @@ module.exports = {
                 await Link.deleteOne({
                     _id,
                     createdBy: userId
+                });
+                // Delete Stats associated with the Link
+                await Stats.deleteOne({
+                    link: _id
                 });
                 return link;
             } catch(err) {

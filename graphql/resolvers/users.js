@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { UserInputError } = require('apollo-server');
 
-const User = require('../../models/User');
+const { User } = require('../../models');
 const { TOKEN } = require('../../config');
 const { createAuthToken  } = require('../../utils/auth-token');
 const {
