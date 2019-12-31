@@ -9,8 +9,8 @@ const linkSchema = new Schema({
         default: true
     },
     createdBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'users'
+        ref: 'Users',
+        type: Schema.Types.ObjectId
     }
 }, { timestamps: true });
 

@@ -1,3 +1,5 @@
+const zxcvbn = require('zxcvbn');
+
 const REGEX_ID = /^(?=[a-f\d]{24}$)(\d+[a-f]|[a-f]+\d)/i;
 const REGEX_URL = /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/;
 const REGEX_EMAIL = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/;
@@ -15,6 +17,8 @@ module.exports = {
             errors.password = 'Password must not be empty';
         } else if (password !== confirmPassword) {
             errors.confirmPassword = 'Passwords must match';
+        } else if (zxcvbn(password).score < 3) {
+            errors.password = 'Please choose a stronger password';
         }
         return { errors, valid: Object.keys(errors).length < 1 };
     },

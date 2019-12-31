@@ -7,12 +7,7 @@ const { ApolloServer } = require('apollo-server-express');
 
 const typeDefs = require('./graphql/typedefs');
 const resolvers = require('./graphql/resolvers');
-const {
-    SSL,
-    PORT,
-    MONGODB,
-    HOSTNAME
-} = require('./config');
+const { SSL, PORT, MONGODB } = require('./config');
 
 const apollo = new ApolloServer({
     typeDefs,
@@ -21,6 +16,10 @@ const apollo = new ApolloServer({
 });
 
 const app = express();
+// Add redirect for base URL
+app.get('/', (_, res) => {
+    res.redirect('/graphql');
+});
 apollo.applyMiddleware({ app });
 
 const server = SSL ? https.createServer({
