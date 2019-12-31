@@ -7,11 +7,11 @@ module.exports = {
             """
             Object ID of Link.
             """
-            _id: String
+            _id: String!
             """
             Link name.
             """
-            name: String
+            name: String!
             """
             Link URL.
             """
@@ -23,22 +23,31 @@ module.exports = {
             """
             Determines if the link is active or disabled.
             """
-            active: Boolean
+            active: Boolean!
             """
             User who created the Link.
             """
-            createdBy: ID
+            createdBy: ID!
             """
             Created at timestamp.
             """
-            createdAt: String
+            createdAt: String!
             """
             Last modified at timestamp.
             """
-            updatedAt: String
+            updatedAt: String!
         }
     `,
     inputs: `
+        """
+        Get active Link's URL input.
+        """
+        input GetLinkURLInput {
+            """
+            Hash representing the URL.
+            """
+            hash: String!
+        }
         """
         New Link input.
         """
@@ -81,11 +90,9 @@ module.exports = {
     `,
     queries: `
         """
-        Fetch all links that are active.
-        
-        [Only returns longURL and shortURL]
+        Fetch URL of an active Link provided the Link's hash.
         """
-        getPublicLinks: [Link!]
+        getLinkURL(input: GetLinkURLInput): String!
         """
         Fetch all Links belonging to the authenticated user.
 

@@ -21,17 +21,16 @@ module.exports = {
                 throw new Error(err);
             }
         },
-        async getPublicLinks(_, {}) {
-            try {
-                // Return subset of Link (URLs and active flag)
-                return Link.find({
-                    active: true
-                }, {
-                    '_id': 0, 'hash': 1, 'url': 1
-                });
-            } catch(err) {
-                throw new Error(err);
+        async getLinkURL(_, { input: { hash } }) {
+            // Find an active Link with matching hash
+            const link = await Link.findOne({
+                hash,
+                active: true
+            });
+            if (!link) {
+                throw new UserInputError('Link not found');
             }
+            return link.url;
         }
     },
     Mutations: {

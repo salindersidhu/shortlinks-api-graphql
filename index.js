@@ -16,6 +16,10 @@ const apollo = new ApolloServer({
 });
 
 const app = express();
+// Add redirect for base URL
+app.get('/', (_, res) => {
+    res.redirect('/graphql');
+});
 apollo.applyMiddleware({ app });
 
 const server = SSL ? https.createServer({
