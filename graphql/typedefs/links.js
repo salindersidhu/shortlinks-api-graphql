@@ -1,5 +1,5 @@
 module.exports = {
-    types: `
+  types: `
         """
         Link.
         """
@@ -38,7 +38,7 @@ module.exports = {
             updatedAt: String!
         }
     `,
-    inputs: `
+  inputs: `
         """
         Get active Link's URL input.
         """
@@ -88,7 +88,7 @@ module.exports = {
             _id: String!
         }
     `,
-    queries: `
+  queries: `
         """
         Fetch URL of an active Link provided the Link's hash.
         """
@@ -100,7 +100,7 @@ module.exports = {
         """
         getLinks: [Link!]
     `,
-    mutations: `
+  mutations: `
         """
         Create a new Link.
 

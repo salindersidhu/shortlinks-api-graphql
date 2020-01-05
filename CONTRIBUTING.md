@@ -3,16 +3,18 @@
 Shortlinks Api GraphQL is an open source community project, and everyone is welcome to contribute. This short guide will assist you with the workflow required in successfully having your features and bug fixes merged into the project.
 
 # Table of Contents
-* [How to Contribute Code](#how-to-contribute-code)
-    * [Creating a Fork](#creating-a-fork)
-    * [Keeping Your Fork Up to Date](#keeping-your-fork-up-to-date)
-    * [Creating a Development Branch](#creating-a-development-branch)
-    * [Submitting a Pull Request](#submitting-a-pull-request)
-* [How to Submit a Bug Report](#how-to-submit-a-bug-report)
+
+- [How to Contribute Code](#how-to-contribute-code)
+  - [Creating a Fork](#creating-a-fork)
+  - [Keeping Your Fork Up to Date](#keeping-your-fork-up-to-date)
+  - [Creating a Development Branch](#creating-a-development-branch)
+  - [Submitting a Pull Request](#submitting-a-pull-request)
+- [How to Submit a Bug Report](#how-to-submit-a-bug-report)
 
 ## How to Contribute Code
 
 ### Creating a Fork
+
 The best approach to contribute code to Shortlinks Api GraphQL is to fork the [main repository](https://github.com/salindersidhu/shortlinks-api-graphql) on GitHub, then submit a pull request.
 
 1. [Create an account](https://github.com/join) on GitHub if you do not have one.
@@ -32,6 +34,7 @@ cd shortlinks-api-graphql
 ```
 
 ### Keeping Your Fork Up to Date
+
 You will want to make sure you keep your fork synced with the original repository by tracking the original "upstream" repository that you forked.
 
 1. Add "upstream" to the list of remotes:
@@ -55,6 +58,7 @@ git merge upstream/master
 ```
 
 ### Creating a Development Branch
+
 A new branch is required when working on a new feature or bug fix. This ensures that your changes are kept seperate from the master branch making it easier to manage multiple pull requests for every task you complete.
 
 1. Checkout the master branch as the starting point for the development branch:
@@ -69,9 +73,10 @@ git checkout master
 git checkout -b {prefix}/branch-name origin/master
 ```
 
-*Prefix is either `hotfix`, `feature` or `experiment` depending on the type of development work.*
+_Prefix is either `hotfix`, `feature` or `experiment` depending on the type of development work._
 
 ### Submitting a Pull Request
+
 Prior to submitting a pull request, you must ensure that you have rebased your
 development branch so that merging it into the original repository is a simple
 fast-forward free of merge conflicts.
@@ -86,7 +91,6 @@ git rebase master
 ```
 
 Once you have committed and pushed all of your changes on your development branch to GitHub, go to the page for your fork on GitHub, select your development branch and click the pull request button. Once a pull request has been made, you can continue to make changes to the development branch and your pull request will automatically track the changes and update.
-
 
 ## How to Submit a Bug Report
 

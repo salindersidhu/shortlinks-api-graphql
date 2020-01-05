@@ -1,5 +1,5 @@
 module.exports = {
-    types: `
+  types: `
         """
         User authentication data.
         """
@@ -10,7 +10,7 @@ module.exports = {
             token: String!
         }
     `,
-    inputs: `
+  inputs: `
         """
         User login input.
         """
@@ -46,7 +46,7 @@ module.exports = {
             confirmPassword: String!
         }
     `,
-    mutations: `
+  mutations: `
         """
         Login and authenticate an existing User.
         """

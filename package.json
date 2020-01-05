@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "precommit": "pretty-quick --staged"
   },
   "repository": {
     "type": "git",
@@ -18,22 +19,27 @@
   },
   "homepage": "https://github.com/salindersidhu/shortlinks#readme",
   "dependencies": {
-    "apollo-server": "^2.9.9",
-    "apollo-server-express": "^2.9.9",
+    "apollo-server": "^2.9.15",
+    "apollo-server-express": "^2.9.15",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
-    "dataloader": "^1.4.0",
+    "dataloader": "^2.0.0",
     "express": "^4.17.1",
     "graphql": "^14.5.8",
-    "mongoose": "^5.7.10",
+    "mongoose": "^5.8.4",
     "njwt": "^1.0.0",
     "shorthash": "0.0.2",
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "eslint": "^6.6.0",
-    "nodemon": "^1.19.4"
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "husky": "^3.1.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1"
   }
 }
