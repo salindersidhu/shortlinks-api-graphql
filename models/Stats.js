@@ -5,15 +5,7 @@ const statsSchema = new Schema({
     ref: "links",
     type: Schema.Types.ObjectId
   },
-  clicks: [
-    {
-      date: Date,
-      location: {
-        latitude: Number,
-        longitude: Number
-      }
-    }
-  ]
+  clicks: [{ date: Date }]
 });
 
 module.exports = model("Stats", statsSchema);

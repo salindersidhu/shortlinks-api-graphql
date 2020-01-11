@@ -30,6 +30,11 @@ module.exports = {
       if (!link) {
         throw new UserInputError("Link not found");
       }
+      // Update Stats associated with Link
+      await Stats.updateOne(
+        { link: link._id },
+        { $push: { clicks: { date: new Date() } } }
+      );
       return link.url;
     }
   },
