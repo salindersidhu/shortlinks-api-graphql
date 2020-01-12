@@ -41,7 +41,7 @@ module.exports = {
   Mutations: {
     async createLink(_, { input: { url, name } }, context) {
       // Check and obtain user ID from auth token
-      const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
+      const { sub: userId } = checkToken(TOKEN.KEY, context.req);
       // Validate input data
       const { valid, errors } = validateCreateLinkInput(url, name);
       if (!valid) {
@@ -75,7 +75,7 @@ module.exports = {
     },
     async editLink(_, { input: { _id, name, active } }, context) {
       // Check and obtain user ID from auth token
-      const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
+      const { sub: userId } = checkToken(TOKEN.KEY, context.req);
       // Validate input data
       const { valid, errors } = validateEditLinkInput(_id, name);
       if (!valid) {
@@ -92,7 +92,7 @@ module.exports = {
     },
     async deleteLink(_, { input: { _id } }, context) {
       // Check and obtain user ID from auth token
-      const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
+      const { sub: userId } = checkToken(TOKEN.KEY, context.req);
       // Validate input data
       const { valid, errors } = validateDeleteLinkInput(_id);
       if (!valid) {
