@@ -3,18 +3,18 @@ const { UserInputError } = require("apollo-server");
 
 const { TOKEN } = require("../../config");
 const { Link, Stats } = require("../../models");
-const { checkAuthToken } = require("../../utils/auth-token");
 const {
+  checkToken,
   validateEditLinkInput,
   validateCreateLinkInput,
   validateDeleteLinkInput
-} = require("../../utils/validators");
+} = require("../../utils");
 
 module.exports = {
   Query: {
     async getLinks(_, {}, context) {
       // Check and obtain user ID from auth token
-      const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
+      const { sub: userId } = checkToken(TOKEN.KEY, context.req);
       try {
         return await Link.find({ createdBy: userId });
       } catch (err) {
@@ -30,6 +30,11 @@ module.exports = {
       if (!link) {
         throw new UserInputError("Link not found");
       }
+      // Update Stats associated with Link
+      await Stats.updateOne(
+        { link: link._id },
+        { $push: { clicks: { date: new Date() } } }
+      );
       return link.url;
     }
   },

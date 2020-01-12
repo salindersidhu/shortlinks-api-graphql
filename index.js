@@ -33,7 +33,11 @@ const server = SSL
   : http.createServer(app);
 
 mongoose
-  .connect(MONGODB, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(MONGODB, {
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
   .then(() => {
     console.log("Database connected");
     return server.listen({ port: PORT });
@@ -43,4 +47,7 @@ mongoose
       "Server running at",
       `http${SSL ? "s" : ""}://localhost:${PORT}${apollo.graphqlPath}`
     );
+  })
+  .catch(error => {
+    console.error(error.stack);
   });

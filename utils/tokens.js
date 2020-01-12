@@ -2,7 +2,7 @@ const url = require("url");
 const njwt = require("njwt");
 
 module.exports = {
-  createAuthToken: (payload, key, life, req) => {
+  createToken: (payload, key, life, req) => {
     // Create a JWT for authentication
     const token = njwt.create(
       {
@@ -20,7 +20,7 @@ module.exports = {
     // Return JWT as a compact token
     return token.compact();
   },
-  checkAuthToken: (key, req) => {
+  checkToken: (key, req) => {
     // Check if request header contains 'Authorization'
     const authHeader = req.get("Authorization");
     if (authHeader) {
