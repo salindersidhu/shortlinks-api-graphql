@@ -6,6 +6,7 @@
 
 - [Development](#development)
   - [Prerequisites](#Prerequisites)
+  - [Setup](#setup)
   - [Running](#running)
   - [Contributing](#contributing)
 - [Codebase](#codebase)
@@ -23,6 +24,16 @@ Ensure that you have the following installed and configured any environment vari
   - Version 2.20.1+
 - **Node**
   - Version 10.15.0+
+
+## Setup
+
+Modify the settings in [config.js](config.js) for your specific environment.
+
+You can configure git to ignore [config.js](config.js) and prevent commiting any sensative data added to this file:
+
+```bash
+git update-index --assume-unchanged config.js
+```
 
 ## Running
 
