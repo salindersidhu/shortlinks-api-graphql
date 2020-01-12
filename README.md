@@ -49,7 +49,6 @@ Shortlinks Api GraphQL welcomes contributions from anyone and everyone. Please s
 ## Structure
 
     .
-    ├── ...
     ├── graphql                     # GraphQL source data
     │    ├── resolvers              # GraphQL resolvers
     │    │   ├── index.js           # Root resolver
@@ -59,11 +58,10 @@ Shortlinks Api GraphQL welcomes contributions from anyone and everyone. Please s
     │    │   └── ...
     │    └── ...
     ├── models                      # DB models
-    │   ├── ...
-    │   └── index.js                # DB models index
+    │   ├── index.js                # DB models index
+    │   └── ...
     ├── utils                       # Utility functions
-    │   ├── auth-token.js           # Authentication token utils
-    │   ├── validators.js           # Server side form input validators
+    │   ├── index.js                # Utility index
     │   └── ...
     ├── index.js                    # Main server logic
     ├── config.js                   # Server config

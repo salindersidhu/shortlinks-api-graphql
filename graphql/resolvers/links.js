@@ -3,18 +3,18 @@ const { UserInputError } = require("apollo-server");
 
 const { TOKEN } = require("../../config");
 const { Link, Stats } = require("../../models");
-const { checkAuthToken } = require("../../utils/auth-token");
 const {
+  checkToken,
   validateEditLinkInput,
   validateCreateLinkInput,
   validateDeleteLinkInput
-} = require("../../utils/validators");
+} = require("../../utils");
 
 module.exports = {
   Query: {
     async getLinks(_, {}, context) {
       // Check and obtain user ID from auth token
-      const { sub: userId } = checkAuthToken(TOKEN.KEY, context.req);
+      const { sub: userId } = checkToken(TOKEN.KEY, context.req);
       try {
         return await Link.find({ createdBy: userId });
       } catch (err) {

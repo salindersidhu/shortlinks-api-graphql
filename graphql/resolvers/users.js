@@ -3,11 +3,11 @@ const { UserInputError } = require("apollo-server");
 
 const { User } = require("../../models");
 const { TOKEN } = require("../../config");
-const { createAuthToken } = require("../../utils/auth-token");
 const {
+  createToken,
   validateLoginInput,
   validateRegisterInput
-} = require("../../utils/validators");
+} = require("../../utils");
 
 module.exports = {
   Mutation: {
@@ -46,7 +46,7 @@ module.exports = {
       const res = await newUser.save();
       // Generate and return auth token
       return {
-        token: createAuthToken(
+        token: createToken(
           {
             sub: res.id,
             scope: "default"
@@ -77,7 +77,7 @@ module.exports = {
       }
       // Generate and return auth token
       return {
-        token: createAuthToken(
+        token: createToken(
           {
             sub: user.id,
             scope: "default"
