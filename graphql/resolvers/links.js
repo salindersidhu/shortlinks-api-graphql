@@ -7,7 +7,7 @@ const {
   checkToken,
   validateEditLinkInput,
   validateCreateLinkInput,
-  validateDeleteLinkInput
+  validateDeleteLinkInput,
 } = require("../../utils");
 
 module.exports = {
@@ -25,7 +25,7 @@ module.exports = {
       // Find an active Link with matching hash
       const link = await Link.findOne({
         hash,
-        active: true
+        active: true,
       });
       if (!link) {
         throw new UserInputError("Link not found");
@@ -36,7 +36,7 @@ module.exports = {
         { $push: { clicks: { date: new Date() } } }
       );
       return link.url;
-    }
+    },
   },
   Mutations: {
     async createLink(_, { input: { url, name } }, context) {
@@ -52,8 +52,8 @@ module.exports = {
       if (existingLink) {
         throw new UserInputError("Link with URL exists", {
           errors: {
-            url: "You previously created a Link using this URL"
-          }
+            url: "You previously created a Link using this URL",
+          },
         });
       }
       /**
@@ -64,11 +64,11 @@ module.exports = {
         url,
         name,
         hash: shorthash.unique(userId + url),
-        createdBy: userId
+        createdBy: userId,
       });
       // Generate stats for the new Link
       await new Stats({
-        link: newLink._id
+        link: newLink._id,
       }).save();
       // Save and return Link to DB
       return await newLink.save();
@@ -102,7 +102,7 @@ module.exports = {
         // Obtain user owned Link from DB
         const link = await Link.findOne({
           _id,
-          createdBy: userId
+          createdBy: userId,
         });
         if (!link) {
           throw new UserInputError("Link not found");
@@ -110,16 +110,16 @@ module.exports = {
         // Delete Link from DB and return it
         await Link.deleteOne({
           _id,
-          createdBy: userId
+          createdBy: userId,
         });
         // Delete Stats associated with the Link
         await Stats.deleteOne({
-          link: _id
+          link: _id,
         });
         return link;
       } catch (err) {
         throw new Error(err);
       }
-    }
-  }
+    },
+  },
 };

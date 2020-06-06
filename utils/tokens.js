@@ -10,8 +10,8 @@ module.exports = {
         iss: url.format({
           protocol: req.protocol,
           host: req.get("host"),
-          pathname: ""
-        })
+          pathname: "",
+        }),
       },
       key
     );
@@ -38,5 +38,5 @@ module.exports = {
       throw new Error('Authentication token must be "Bearer [token]"');
     }
     throw new Error("Authorization header must be provided");
-  }
+  },
 };

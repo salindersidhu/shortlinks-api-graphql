@@ -55,5 +55,5 @@ module.exports = {
         Register and authenticate a new User.
         """
         register(input: RegisterInput): AuthData!
-    `
+    `,
 };

@@ -119,5 +119,5 @@ module.exports = {
         [Requires Authentication]
         """
         deleteLink(input: DeleteLinkInput): Link!
-    `
+    `,
 };

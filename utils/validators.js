@@ -55,11 +55,11 @@ module.exports = {
     }
     return { errors, valid: Object.keys(errors).length < 1 };
   },
-  validateDeleteLinkInput: _id => {
+  validateDeleteLinkInput: (_id) => {
     const errors = {};
     if (!_id.match(REGEX_ID)) {
       errors.url = "ID must be a valid MongoDB ID";
     }
     return { errors, valid: Object.keys(errors).length < 1 };
-  }
+  },
 };

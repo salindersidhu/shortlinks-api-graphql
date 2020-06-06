@@ -9,11 +9,11 @@ const props = {
   types: [],
   inputs: [],
   queries: [],
-  mutations: []
+  mutations: [],
 };
 
-typeDefs.forEach(typDef => {
-  Object.keys(props).forEach(prop => {
+typeDefs.forEach((typDef) => {
+  Object.keys(props).forEach((prop) => {
     props[prop].push(typDef[prop] || "");
   });
 });

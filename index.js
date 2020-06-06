@@ -12,7 +12,7 @@ const { SSL, PORT, MONGODB } = require("./config");
 const apollo = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ req }) => ({ req })
+  context: ({ req }) => ({ req }),
 });
 
 const app = express();
@@ -26,7 +26,7 @@ const server = SSL
   ? https.createServer(
       {
         key: fs.readFileSync(SSL.KEY),
-        crt: fs.readFileSync(SSL.CRT)
+        crt: fs.readFileSync(SSL.CRT),
       },
       app
     )
@@ -36,7 +36,7 @@ mongoose
   .connect(MONGODB, {
     useCreateIndex: true,
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   })
   .then(() => {
     console.log("Database connected");
@@ -48,6 +48,6 @@ mongoose
       `http${SSL ? "s" : ""}://localhost:${PORT}${apollo.graphqlPath}`
     );
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error.stack);
   });
