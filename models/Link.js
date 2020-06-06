@@ -7,12 +7,12 @@ const linkSchema = new Schema(
     hash: String,
     active: {
       type: Boolean,
-      default: true
+      default: true,
     },
     createdBy: {
       ref: "Users",
-      type: Schema.Types.ObjectId
-    }
+      type: Schema.Types.ObjectId,
+    },
   },
   { timestamps: true }
 );

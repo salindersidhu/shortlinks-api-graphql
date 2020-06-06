@@ -6,7 +6,7 @@ const { TOKEN } = require("../../config");
 const {
   createToken,
   validateLoginInput,
-  validateRegisterInput
+  validateRegisterInput,
 } = require("../../utils");
 
 module.exports = {
@@ -31,8 +31,8 @@ module.exports = {
       if (existingUser) {
         throw new UserInputError("Email is taken", {
           errors: {
-            email: "This email is taken"
-          }
+            email: "This email is taken",
+          },
         });
       }
       // Hash password and create auth token
@@ -41,7 +41,7 @@ module.exports = {
       const newUser = new User({
         email,
         username,
-        password
+        password,
       });
       const res = await newUser.save();
       // Generate and return auth token
@@ -49,12 +49,12 @@ module.exports = {
         token: createToken(
           {
             sub: res.id,
-            scope: "default"
+            scope: "default",
           },
           TOKEN.KEY,
           TOKEN.LIFE,
           context.req
-        )
+        ),
       };
     },
     async login(_, { input: { email, password } }, context) {
@@ -80,13 +80,13 @@ module.exports = {
         token: createToken(
           {
             sub: user.id,
-            scope: "default"
+            scope: "default",
           },
           TOKEN.KEY,
           TOKEN.LIFE,
           context.req
-        )
+        ),
       };
-    }
-  }
+    },
+  },
 };

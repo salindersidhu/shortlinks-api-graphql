@@ -4,7 +4,7 @@ const {
   validateLoginInput,
   validateCreateLinkInput,
   validateEditLinkInput,
-  validateDeleteLinkInput
+  validateDeleteLinkInput,
 } = require("./validators");
 
 module.exports = {
@@ -14,5 +14,5 @@ module.exports = {
   validateLoginInput,
   validateCreateLinkInput,
   validateEditLinkInput,
-  validateDeleteLinkInput
+  validateDeleteLinkInput,
 };
