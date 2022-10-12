@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/salindersidhu/shortlinks#readme",
   "dependencies": {
-    "apollo-server": "^2.25.3",
+    "apollo-server": "^2.25.4",
     "apollo-server-express": "^2.25.3",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
